@@ -1,12 +1,12 @@
 import './App.css';
-import type { ReactElement } from "react";
+import { Scene } from "./components/Scene.tsx";
 
-const App = (): ReactElement => {
-  return (
-    <>
-      <h1>Hello Flux</h1>
-    </>
-  );
-}
+const App = () => {
+    return (
+        <>
+            <Scene/>
+        </>
+    );
+};
 
 export default App;
