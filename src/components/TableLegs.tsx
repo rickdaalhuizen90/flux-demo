@@ -1,5 +1,6 @@
 import type { ReactElement } from "react";
 import type { Shape, Legs } from "../types.ts";
+import { useTableConfig } from "../context/TableConfigContext.tsx";
 
 const LEG_ARGS: Record<Legs, [number, number, number, number]> = {
     ankara: [15, 25, 70, 32],
@@ -12,8 +13,9 @@ const LEG_POSITIONS: Record<Shape, [number, number, number][]> = {
 };
 
 const TableLegs = (): ReactElement => {
-    const positions = LEG_POSITIONS["rectangle"];
-    const args = LEG_ARGS["ankara"];
+    const { config } = useTableConfig();
+    const positions = LEG_POSITIONS[config.top.shape];
+    const args = LEG_ARGS[config.legs];
 
     return (
         <>

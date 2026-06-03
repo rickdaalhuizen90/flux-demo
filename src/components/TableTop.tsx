@@ -3,6 +3,7 @@ import { Shape as ThreeShape, MirroredRepeatWrapping } from "three";
 import { useTexture } from "@react-three/drei";
 import type { Shape, Dimensions } from "../types.ts";
 import { MATERIALS } from "../materials.ts";
+import { useTableConfig } from "../context/TableConfigContext.tsx";
 
 const ROTATION: [number, number, number] = [-Math.PI / 2, 0, 0];
 
@@ -30,17 +31,19 @@ const SHAPES: Record<Shape, (d: Dimensions) => ThreeShape> = {
 };
 
 const TableTop = (): ReactElement => {
-    const { texture, roughness, metalness } = MATERIALS["oak"];
+    const { config } = useTableConfig();
+    const { shape, material, dimensions } = config.top;
+    const { texture, roughness, metalness } = MATERIALS[material];
     const map = useTexture(texture, (t) => {
         t.wrapS = t.wrapT = MirroredRepeatWrapping;
         t.repeat.set(1 / 30, 1 / 30);
     });
 
-    const extrudeOptions = { depth: 5, bevelEnabled: false, curveSegments: 64 };
+    const extrudeOptions = { depth: dimensions.height, bevelEnabled: false, curveSegments: 64 };
 
     return (
         <mesh rotation={ROTATION}>
-            <extrudeGeometry args={[SHAPES["rectangle"]({ length: 100, width: 200, height: 5 }), extrudeOptions]} />
+            <extrudeGeometry args={[SHAPES[shape](dimensions), extrudeOptions]} />
             <meshStandardMaterial map={map} roughness={roughness} metalness={metalness} />
         </mesh>
     );
