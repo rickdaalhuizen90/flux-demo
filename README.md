@@ -6,6 +6,8 @@ Het doel van dit project is om een parametrische 3D-tafelconfigurator te bouwen 
 
 De gebruiker kan met deze demo blad-afmetingen, bladvorm, pootmodel en materiaal aanpassen.
 
+Zie demo: https://flux-demo.rick-daalhuizen-85a.workers.dev/
+
 ### Aanpak
 
 Alle configuratie staat centraal in één context als source-of-truth. Voor de bladvorm gebruik ik `ExtrudeGeometry`, zodat één geometry zowel rechthoekig als rond afdekt.
