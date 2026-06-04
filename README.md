@@ -6,6 +6,8 @@ Het doel van dit project is om een parametrische 3D-tafelconfigurator te bouwen 
 
 De gebruiker kan met deze demo blad-afmetingen, bladvorm, pootmodel en materiaal aanpassen.
 
+Zie demo: https://flux-demo.rick-daalhuizen-85a.workers.dev/
+
 ### Aanpak
 
 Het idee is om 1 centraal config te hebben waarbij afmetingen, vorm en materiaal op 1 plek staan.
