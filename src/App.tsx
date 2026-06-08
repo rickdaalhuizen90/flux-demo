@@ -1,9 +1,15 @@
 import './App.css';
-import { useTableConfig } from "./context/TableConfigContext.tsx";
+import type { ReactElement } from "react";
+import { DEFAULT_CONFIG, useTableConfig } from "./context/TableConfigContext.tsx";
 import { Scene } from "./components/Scene.tsx";
-import type {ReactElement} from "react";
 
-const App = (): ReactElement<string> => {
+const MAX_LENGTH = DEFAULT_CONFIG.top.dimensions.length * 1.5;
+const MAX_WIDTH  = DEFAULT_CONFIG.top.dimensions.width  * 1.5;
+const MAX_HEIGHT = DEFAULT_CONFIG.top.dimensions.height * 2;
+
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
+const App = (): ReactElement => {
     const { config, setShape, setLegs, setMaterial, setDimensions } = useTableConfig();
 
     return (
@@ -77,10 +83,10 @@ const App = (): ReactElement<string> => {
                             <input
                                 className="dimension-input__field"
                                 type="number"
-                                min={100}
-                                max={130}
+                                min={MAX_LENGTH / 2}
+                                max={MAX_LENGTH}
                                 value={config.top.dimensions.length}
-                                onChange={(e) => setDimensions({ length: Math.min(130, Math.max(100, Number(e.target.value))) })}
+                                onChange={(e) => setDimensions({ length: clamp(Number(e.target.value), MAX_LENGTH / 2, MAX_LENGTH) })}
                             />
                         </label>
                         <label className="dimension-input">
@@ -88,10 +94,10 @@ const App = (): ReactElement<string> => {
                             <input
                                 className="dimension-input__field"
                                 type="number"
-                                min={200}
-                                max={250}
+                                min={MAX_WIDTH / 2}
+                                max={MAX_WIDTH}
                                 value={config.top.dimensions.width}
-                                onChange={(e) => setDimensions({ width: Math.min(250, Math.max(200, Number(e.target.value))) })}
+                                onChange={(e) => setDimensions({ width: clamp(Number(e.target.value), MAX_WIDTH / 2, MAX_WIDTH) })}
                             />
                         </label>
                         <label className="dimension-input">
@@ -99,10 +105,10 @@ const App = (): ReactElement<string> => {
                             <input
                                 className="dimension-input__field"
                                 type="number"
-                                min={5}
-                                max={10}
+                                min={MAX_HEIGHT / 2}
+                                max={MAX_HEIGHT}
                                 value={config.top.dimensions.height}
-                                onChange={(e) => setDimensions({ height: Math.min(10, Math.max(5, Number(e.target.value))) })}
+                                onChange={(e) => setDimensions({ height: clamp(Number(e.target.value), MAX_HEIGHT / 2, MAX_HEIGHT) })}
                             />
                         </label>
                     </div>

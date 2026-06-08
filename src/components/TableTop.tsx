@@ -1,50 +1,45 @@
 import type { ReactElement } from "react";
-import { Shape as ThreeShape, MirroredRepeatWrapping } from "three";
+import { Shape, RepeatWrapping } from "three";
 import { useTexture } from "@react-three/drei";
-import type { Shape, Dimensions } from "../types.ts";
+import type { Dimensions, TopShape } from "../types.ts";
 import { MATERIALS } from "../materials.ts";
 import { useTableConfig } from "../context/TableConfigContext.tsx";
 
 const ROTATION: [number, number, number] = [-Math.PI / 2, 0, 0];
 
-const buildRoundShape = ({ length, width }: Dimensions) => {
-    const shape = new ThreeShape();
-    shape.absarc(0, 0, Math.min(length + 5, width + 5) / 2, 0, Math.PI * 2);
-    return shape;
-};
+const buildShape = (type: TopShape, { length, width }: Dimensions): Shape => {
+    const shape = new Shape();
 
-const buildRectangleShape = ({ length, width }: Dimensions) => {
-    const shape = new ThreeShape();
-    const x = length / 2;
-    const y = width / 2;
-    shape.moveTo(-x, -y);
-    shape.lineTo(x, -y);
-    shape.lineTo(x, y);
-    shape.lineTo(-x, y);
-    shape.closePath();
-    return shape;
-};
+    if (type === "round") {
+        const radius = Math.min(length, width) / 2;
+        const circle = Math.PI * 2;
+        shape.absarc(0, 0, radius, 0, circle);
+        return shape;
+    }
 
-const SHAPES: Record<Shape, (d: Dimensions) => ThreeShape> = {
-    round: buildRoundShape,
-    rectangle: buildRectangleShape,
+    const [x, y] = [length / 2, width / 2];
+    // Begin links onderaan t/m de klok mee
+    shape.moveTo(-x, -y).lineTo(x, -y).lineTo(x, y).lineTo(-x, y).closePath();
+    return shape;
 };
 
 const TableTop = (): ReactElement => {
     const { config } = useTableConfig();
     const { shape, material, dimensions } = config.top;
-    const { texture, roughness, metalness } = MATERIALS[material];
-    const map = useTexture(texture, (t) => {
-        t.wrapS = t.wrapT = MirroredRepeatWrapping;
-        t.repeat.set(1 / 30, 1 / 30);
+    const { color, normalMap, roughnessMap } = MATERIALS[material];
+
+    const textures = useTexture({ map: color, normalMap, roughnessMap }, (loaded) => {
+        for (const t of Object.values(loaded)) {
+            t.wrapS = t.wrapT = RepeatWrapping;
+            t.repeat.set(0.04, 0.04);
+            t.anisotropy = 16;
+        }
     });
 
-    const extrudeOptions = { depth: dimensions.height, bevelEnabled: false, curveSegments: 64 };
-
     return (
-        <mesh rotation={ROTATION}>
-            <extrudeGeometry args={[SHAPES[shape](dimensions), extrudeOptions]} />
-            <meshStandardMaterial map={map} roughness={roughness} metalness={metalness} />
+        <mesh rotation={ROTATION} castShadow receiveShadow>
+            <extrudeGeometry args={[buildShape(shape, dimensions), { depth: dimensions.height, curveSegments: 64 }]} />
+            <meshStandardMaterial {...textures} normalScale={[1, 1]} />
         </mesh>
     );
 };

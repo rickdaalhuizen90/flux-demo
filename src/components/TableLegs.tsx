@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import type { Shape, Legs } from "../types.ts";
+import type { Legs } from "../types.ts";
 import { useTableConfig } from "../context/TableConfigContext.tsx";
 
 const LEG_ARGS: Record<Legs, [number, number, number, number]> = {
@@ -7,22 +7,27 @@ const LEG_ARGS: Record<Legs, [number, number, number, number]> = {
     san_diego: [15, 15, 70, 32],
 };
 
-const LEG_POSITIONS: Record<Shape, [number, number, number][]> = {
-    rectangle: [[0, -35, -60], [0, -35, 60]],
-    round: [[0, -35, 0]],
-};
-
 const TableLegs = (): ReactElement => {
     const { config } = useTableConfig();
-    const positions = LEG_POSITIONS[config.top.shape];
+    const { shape, dimensions } = config.top;
     const args = LEG_ARGS[config.legs];
+
+    const legY = -(args[2] / 2); // poot hoogte=70 → centreert op y=0 (van -35 tot +35)
+    const inset = dimensions.length / 2 - 40; // tafel loopt van x=-100 tot x=100, poten 40cm van de rand (x=±60)
+
+    const positions: [number, number, number][] = shape === 'round'
+        ? [[0, legY, 0]]
+        : [
+            [ inset, legY, 0], // rechter poot (x=+60)
+            [-inset, legY, 0], // linker poot  (x=-60)
+        ];
 
     return (
         <>
-            {positions.map((position) => (
-                <mesh key={position.join()} position={position}>
-                    <cylinderGeometry args={args} />
-                    <meshStandardMaterial color="#444" />
+            {positions.map((position: [number, number, number]) => (
+                <mesh key={position.join()} position={position} castShadow>
+                    <cylinderGeometry args={args}/>
+                    <meshStandardMaterial color="#333"/>
                 </mesh>
             ))}
         </>

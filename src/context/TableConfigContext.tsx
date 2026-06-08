@@ -1,16 +1,16 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
-import type { TableConfig, Shape, Material, Legs, Dimensions } from "../types.ts";
+import type { TableConfig, TopShape, Material, Legs, Dimensions } from "../types.ts";
 
 type Context = {
     config: TableConfig;
-    setShape: (shape: Shape) => void;
+    setShape: (shape: TopShape) => void;
     setMaterial: (material: Material) => void;
     setLegs: (legs: Legs) => void;
     setDimensions: (dims: Partial<Dimensions>) => void;
 };
 
 const DEFAULT_CONFIG: TableConfig = {
-    top: { shape: "rectangle", material: "oak", dimensions: { length: 100, width: 200, height: 5 } },
+    top: { shape: "rectangle", material: "oak", dimensions: { length: 200, width: 100, height: 5 } },
     legs: "ankara",
 };
 
@@ -36,4 +36,4 @@ const TableConfigProvider = ({ children }: { children: ReactNode }) => {
 
 const useTableConfig = () => useContext(TableConfigContext)!;
 
-export {TableConfigProvider, useTableConfig};
+export {DEFAULT_CONFIG, TableConfigProvider, useTableConfig};
