@@ -1,12 +1,18 @@
-import type { Material } from './types.ts';
+import type { Material } from "./types.ts";
 
-export interface MaterialProps {
-    texture: string
-    roughness: number
-    metalness: number
-}
+type MaterialProps = { color: string; normalMap: string; roughnessMap: string };
 
-export const MATERIALS: Record<Material, MaterialProps> = {
-    "oak": { texture: "/oak.jpg", roughness: 0.80, metalness: 0.0 },
-    "walnut": { texture: "/walnut.jpg", roughness: 0.75, metalness: 0.0 },
+const MATERIALS: Record<Material, MaterialProps> = {
+    oak: {
+        color:        '/Wood076_1K-JPG_Color.jpg',
+        normalMap:    '/Wood076_1K-JPG_NormalGL.jpg',
+        roughnessMap: '/Wood076_1K-JPG_Roughness.jpg',
+    },
+    walnut: {
+        color:        '/Wood094_1K-JPG_Color.jpg',
+        normalMap:    '/Wood094_1K-JPG_NormalGL.jpg',
+        roughnessMap: '/Wood094_1K-JPG_Roughness.jpg',
+    },
 };
+
+export { MATERIALS };
