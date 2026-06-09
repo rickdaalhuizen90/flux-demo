@@ -54,6 +54,13 @@ const App = (): ReactElement => {
                         >
                             San Diego
                         </button>
+
+                        <button
+                            className={`option-button${config.legs === 'stockholm' ? ' option-button--active' : ''}`}
+                            onClick={() => setLegs("stockholm")}
+                        >
+                            Stockholm
+                        </button>
                     </div>
                 </div>
 

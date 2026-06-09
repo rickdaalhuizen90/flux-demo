@@ -3,7 +3,7 @@ import { TableTop } from "./TableTop.tsx";
 import { TableLegs } from "./TableLegs.tsx";
 
 const Table = (): ReactElement => (
-    <group>
+    <group position={[0, 70, 0]}>
         <TableTop />
         <TableLegs />
     </group>

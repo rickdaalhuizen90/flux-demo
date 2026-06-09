@@ -10,7 +10,7 @@ const Scene = (): ReactElement => (
         <ambientLight intensity={0.4} />
         <directionalLight position={[100, 200, 100]} intensity={1.2} castShadow />
         <Table />
-        <OrbitControls />
+        <OrbitControls target={[0, 75, 0]} />
     </Canvas>
 );
 
