@@ -21,6 +21,7 @@ export default defineConfig([
       'semi': ['error', 'always'],
       'func-style': ['error', 'expression'],
       'prefer-arrow-callback': ['error'],
+      'no-console': ['warn']
     },
   }
 ])
